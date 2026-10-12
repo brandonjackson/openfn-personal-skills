@@ -1,0 +1,9 @@
+{
+  "name": "lightning-screenshots",
+  "description": "Run OpenFn Lightning locally with the demo.openfn.org data and take screenshots, including for pull requests (zip or PR comment).",
+  "version": "0.1.0",
+  "author": {
+    "name": "Brandon"
+  },
+  "keywords": ["openfn", "lightning", "screenshots", "playwright"]
+}
