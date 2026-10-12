@@ -1,0 +1,9 @@
+{
+  "name": "first-impressions",
+  "description": "Fresh-eyes walkthrough of a web experience: go one screen at a time, record what you see, what's confusing and what you predict, then reflect and turn the journey into a slide deck.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Brandon"
+  },
+  "keywords": ["ux", "design-review", "first-impressions", "usability", "playwright"]
+}

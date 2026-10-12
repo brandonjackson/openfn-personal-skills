@@ -5,12 +5,14 @@ A Claude Code plugin marketplace.
 | plugin | skills |
 | --- | --- |
 | `lightning-screenshots` | `lightning-screenshots`: run OpenFn Lightning locally with the demo.openfn.org data and screenshot any page.<br>`lightning-pr-screenshots`: screenshot what a PR changes, then zip the images or post them as a PR comment. |
+| `first-impressions` | `first-impressions`: a fresh-eyes walkthrough of a URL (or a set of screenshots), one screen at a time, turned into a slide deck. |
 
 ## Install
 
 ```
 /plugin marketplace add brandonjackson/openfn-personal-skills
 /plugin install lightning-screenshots@personal-plugins
+/plugin install first-impressions@personal-plugins
 ```
 
 For a private repo, Claude Code clones with your existing git credentials.
@@ -24,6 +26,9 @@ plugins/lightning-screenshots/
   .claude-plugin/plugin.json
   skills/lightning-screenshots/      SKILL.md, setup.sh, shoot.mjs
   skills/lightning-pr-screenshots/   SKILL.md, zip.sh, publish.sh
+plugins/first-impressions/
+  .claude-plugin/plugin.json
+  skills/first-impressions/          SKILL.md, browse.mjs, deck.mjs
 ```
 
 Bump `version` in both `plugin.json` and `marketplace.json` when you change a
