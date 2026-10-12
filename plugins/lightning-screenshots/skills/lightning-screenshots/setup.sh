@@ -32,10 +32,11 @@ EX_VSN=$(awk '/^elixir /{print $2}' .tool-versions)     # e.g. 1.18.4-otp-28
 BEAM=/opt/beam
 if ! command -v elixir >/dev/null 2>&1 && [[ ! -x $BEAM/elixir/bin/elixir ]]; then
   step "Installing Erlang/OTP $OTP_VSN and Elixir $EX_VSN from builds.hex.pm"
-  mkdir -p $BEAM/otp-src
+  # The tarball installs in place: Install's <ERL_ROOT> is the dir it's unpacked in.
+  rm -rf $BEAM/otp && mkdir -p $BEAM/otp
   curl -sSfL "https://builds.hex.pm/builds/otp/amd64/ubuntu-24.04/OTP-${OTP_VSN}.tar.gz" \
-    | tar xz -C $BEAM/otp-src --strip-components=1
-  (cd $BEAM/otp-src && ./Install -minimal $BEAM/otp >/dev/null)
+    | tar xz -C $BEAM/otp --strip-components=1
+  (cd $BEAM/otp && ./Install -minimal $BEAM/otp >/dev/null)
   curl -sSfL -o $BEAM/ex.zip "https://builds.hex.pm/builds/elixir/v${EX_VSN}.zip"
   mkdir -p $BEAM/elixir && unzip -qo $BEAM/ex.zip -d $BEAM/elixir
 fi
