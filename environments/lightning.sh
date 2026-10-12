@@ -20,6 +20,14 @@
 #
 # Leaves to the session: compile, assets, migrate, seed, start the server.
 # Log: /var/log/lightning-env-setup.log
+#
+# To pick up changes to this file without re-pasting, the Setup script box can
+# hold just:
+#   curl -fsSL https://raw.githubusercontent.com/brandonjackson/openfn-personal-skills/main/environments/lightning.sh | bash
+
+# The environment runs this with errexit on; turn it off so a failed step is
+# logged instead of failing the session.
+set +e
 
 LOG=/var/log/lightning-env-setup.log
 exec > >(tee -a "$LOG") 2>&1
@@ -92,7 +100,7 @@ if command -v mix >/dev/null && (( SECONDS - START < 150 )); then
       timeout 120 mix deps.get >/dev/null || echo "!! mix deps.get incomplete"
       timeout 90 npm ci --prefix assets --no-audit --no-fund --ignore-scripts >/dev/null 2>&1 \
         || echo "!! npm cache warm incomplete"
-    )
+    ) || echo "!! cache warm-up failed"
   fi
   rm -rf $W
 else
