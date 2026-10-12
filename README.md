@@ -18,10 +18,21 @@ A Claude Code plugin marketplace.
 For a private repo, Claude Code clones with your existing git credentials.
 Pull updates with `/plugin marketplace update personal-plugins`.
 
+## Cloud environment
+
+`environments/lightning.sh` is a setup script for a Claude Code cloud
+environment. In an environment's settings, paste it into **Setup script**. It
+installs the parts of Lightning setup that don't depend on a branch: Erlang and
+Elixir (versions from `main`), apt packages, the Postgres password, and warm
+Hex and npm caches. It takes about a minute and is cached with the environment, so
+sessions that use the environment start with all of that on disk. The skills'
+`setup.sh` then only has to compile, seed and start the server.
+
 ## Layout
 
 ```
 .claude-plugin/marketplace.json
+environments/lightning.sh            cloud environment setup script
 plugins/lightning-screenshots/
   .claude-plugin/plugin.json
   skills/lightning-screenshots/      SKILL.md, setup.sh, shoot.mjs

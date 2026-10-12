@@ -27,17 +27,22 @@ step() { printf '\n==> %s\n' "$*"; }
 
 # 1. Erlang + Elixir at the .tool-versions versions. Ubuntu's apt packages are
 #    far too old; hex.pm publishes prebuilt OTP for ubuntu-24.04 and Elixir zips.
+#    A "Lightning" cloud environment (environments/lightning.sh in the skills
+#    repo) may have installed them already; /opt/beam/VERSIONS says which, and
+#    this reinstalls if the checkout wants different ones.
 OTP_VSN=$(awk '/^erlang /{print $2}' .tool-versions)
 EX_VSN=$(awk '/^elixir /{print $2}' .tool-versions)     # e.g. 1.18.4-otp-28
 BEAM=/opt/beam
-if ! command -v elixir >/dev/null 2>&1 && [[ ! -x $BEAM/elixir/bin/elixir ]]; then
+if [[ "$(cat $BEAM/VERSIONS 2>/dev/null)" != "$OTP_VSN $EX_VSN" ]]; then
   step "Installing Erlang/OTP $OTP_VSN and Elixir $EX_VSN from builds.hex.pm"
-  mkdir -p $BEAM/otp-src
+  rm -rf $BEAM && mkdir -p $BEAM/otp $BEAM/elixir
+  # The OTP build installs in place: unpack where it will live, then Install.
   curl -sSfL "https://builds.hex.pm/builds/otp/amd64/ubuntu-24.04/OTP-${OTP_VSN}.tar.gz" \
-    | tar xz -C $BEAM/otp-src --strip-components=1
-  (cd $BEAM/otp-src && ./Install -minimal $BEAM/otp >/dev/null)
+    | tar xz -C $BEAM/otp --strip-components=1
+  (cd $BEAM/otp && ./Install -minimal $BEAM/otp >/dev/null)
   curl -sSfL -o $BEAM/ex.zip "https://builds.hex.pm/builds/elixir/v${EX_VSN}.zip"
-  mkdir -p $BEAM/elixir && unzip -qo $BEAM/ex.zip -d $BEAM/elixir
+  unzip -qo $BEAM/ex.zip -d $BEAM/elixir && rm -f $BEAM/ex.zip
+  echo "$OTP_VSN $EX_VSN" > $BEAM/VERSIONS
 fi
 export PATH=$BEAM/otp/bin:$BEAM/elixir/bin:$PATH
 export LANG=C.UTF-8 ELIXIR_ERL_OPTIONS=+fnu MIX_ENV=dev
